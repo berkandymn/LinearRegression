@@ -20,6 +20,8 @@ print(veriler)
 le=preprocessing.LabelEncoder()
 ohe=preprocessing.OneHotEncoder()
 regressior=LinearRegression()
+sc=StandardScaler()
+lr=LinearRegression()
 
 #%%
 #verilerin ayrılması
@@ -60,9 +62,28 @@ egitim=pd.concat([sag,sol],axis=1)
 
 print(egitim)
 
+#%%
+x_train, x_test, y_train, y_test=train_test_split(egitim,sonuc2,test_size=0.33,random_state=0)
+#%%
 
+xTrain=sc.fit_transform(x_train)
+xTest=sc.fit_transform(x_test)
 
+lr.fit(x_train,y_train)
+tahmin=lr.predict(x_test)
+print(tahmin)
 
+xTrain=sc.fit_transform(x_train)
+xTest=sc.fit_transform(x_test)
+yTrain=sc.fit_transform(y_train)
+yTest=sc.fit_transform(y_test)
 
+x_train=x_train.sort_index()
+y_train=y_train.sort_index()
 
+plt.plot(x_train,y_train)
+plt.plot(x_test,lr.predict(x_test))
+plt.title('Sıcaklık tahminleri')
+plt.show()
 
+# %%
